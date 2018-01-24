@@ -39,7 +39,7 @@ app.get('/movie/:id', (req, res) => {
       console.log(err);
     } else {
       res.render('detail', {
-        title: `movie ${id}`,
+        title: `movie ${movie.title}`,
         movie,
       });
     }

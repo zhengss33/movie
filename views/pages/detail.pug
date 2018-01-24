@@ -3,9 +3,10 @@ extends ../layout
 block content
   .container
     .row
-      .col-md-7
-        embed(src=movie.flash, allowFullScreen="true", quality="high", width="720", height="600", align="middle", type="application/x-shockwave-flash")
-      .col-md-5
+      .col-md-8
+        video(width="100%", controls="controls" tabindex="-1", preload="auto", autoplay)
+          source(src=movie.flash type="video/mp4" title=movie.title)
+      .col-md-4
         dl.dl-horizontal
           dt 电影名字
           dd= movie.title

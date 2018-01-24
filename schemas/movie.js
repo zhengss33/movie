@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+const Schema = require('mongoose').Schema;
 
-const MovieSchema = new mongoose.Schema({
+const MovieSchema = new Schema({
   director: String,
   title: String,
   language: String,
@@ -34,7 +34,7 @@ MovieSchema.statics = {
   fetch(cb) {
     return this
       .find({})
-      .sort(meta.createAt)
+      .sort('meta.createAt')
       .exec(cb);
   },
   findById(id, cb) {
