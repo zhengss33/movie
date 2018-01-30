@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const _ = require('lodash');
 const bodyParser = require('body-parser');
 const Movie = require('./models/movie');
+const User = require('./models/user');
 const path = require('path');
 const port = process.env.PORT || 3000;
 const app = express();
@@ -120,6 +121,20 @@ app.post('/admin/movie/new', (req, res) => {
   }
 });
 
+// userlist
+app.get('/admin/userlist', (req, res) => {
+  User.fetch((err, users) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render('userlist', {
+        title: '用户列表',
+        users,
+      });
+    }
+  })
+})
+
 
 // 列表页
 app.get('/admin/list', (req, res) => {
@@ -154,6 +169,61 @@ app.delete('/admin/list', (req, res) => {
   }
 });
 
+// signup
+app.post('/user/signup', (req, res) => {
+  let _user = req.body.user;
 
+  User.findOne({ name: _user.name }, (err, user) => {
+    if (err) {
+      console.log(err);
+    } else {
+      if (!user) {
+        const user = new User(_user);
+        user.save((err, user) => {
+          if (err) {
+            console.log(err);
+          }
+          res.redirect('/admin/userlist');
+        });
+      } else {
+        res.status = 500;
+        res.end('Username already exist');
+      }
+    }
+  });
+})
+
+// signin
+app.post('/user/signin', (req, res) => {
+  const _user = req.body.user;
+  const name = _user.name;
+  const password = _user.password;
+
+  User.findOne({ name }, (err, user) => {
+    if (err) {
+      console.log(err);
+    } else {
+      if (!user) {
+        res.status = 404;
+        res.end('User does not exist')
+      } else {
+        user.comparePassword(password, (err, isMatch) => {
+          if (err) {
+            console.log(err);
+            return;
+          }
+
+          if (isMatch) {
+            console.log('matched');
+            res.redirect('/');
+          } else {
+            res.status = 500;
+            res.end('Password is not matched');
+          }
+        })
+      }
+    }
+  })
+});
 
 console.log('Server running at port 3000');
