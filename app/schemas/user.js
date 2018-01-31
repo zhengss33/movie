@@ -8,6 +8,14 @@ const UserSchema = new Schema({
     unique: true,
   },
   password: String,
+  // 0: normal user
+  // 1: verified user
+  // 10: admin
+  // 20: super admin
+  role: {
+    type: Number,
+    default: 0,
+  },
   meta: {
     createAt: {
       type: Date,
