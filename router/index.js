@@ -1,6 +1,7 @@
 const Index = require('../app/routes/index');
 const Movie = require('../app/routes/movie');
 const User = require('../app/routes/user');
+const Comment = require('../app/routes/comment');
 
 module.exports = function(app) {
   // pre handle user session
@@ -27,6 +28,9 @@ module.exports = function(app) {
   app.get('/logout', User.logout);
   app.get('/signup', User.toSignup);
   app.get('/signin', User.toSignin);
-  app.post('/signup', User.signup)
+  app.post('/signup', User.signup);
   app.post('/signin', User.signin);
+
+  // comments
+  app.post('/movie/comment', User.signinRequire, Comment.save);
 }

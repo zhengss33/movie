@@ -1,4 +1,5 @@
 const Movie = require('../models/movie');
+const Comment = require('../models/comment');
 const _ = require('lodash');
 
 // movie detail
@@ -9,10 +10,17 @@ exports.detail = function(req, res) {
     if (err) {
       console.log(err);
     } else {
-      res.render('detail', {
-        title: `movie ${movie.title}`,
-        movie,
-      });
+      Comment
+        .find({ movie: id })
+        .populate('from', 'name')
+        .populate('reply.from reply.to', 'name')
+        .exec((err, comments) => {
+          res.render('detail', {
+            title: `movie ${movie.title}`,
+            movie,
+            comments,
+          });
+        });
     }
   });
 }
@@ -71,7 +79,7 @@ exports.save = function(req, res) {
       if (err) {
         console.log(err);
       } else {
-        res.redirect(`/movie/${movie._id}`)
+        res.redirect(`/movie/${movie._id}`);
       }
     });
   }
