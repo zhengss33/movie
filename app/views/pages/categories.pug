@@ -1,0 +1,18 @@
+extends ../layout
+
+block content
+  .container
+    table.table.table-hover.table-bordered
+      thead
+        tr
+          th 电影分类
+          th 录入时间
+          th 更新
+          th 删除
+      tbody
+        each category in  categories
+          tr(class=`item-id-${category._id}`)
+            td=category.name
+            td=moment(category.meta.updateAt).format('MM/DD/YYYY')
+            td: a(target="_blank", href=`../admin/category/update/${category._id}`) 更新
+            td: a(target="_blank", href=`../admin/category/delete/${category._id}`) 删除

@@ -1,5 +1,6 @@
 const Movie = require('../models/movie');
 const Comment = require('../models/comment');
+const Category = require('../models/category');
 const _ = require('lodash');
 
 // movie detail
@@ -27,18 +28,16 @@ exports.detail = function(req, res) {
 
 // 后台录入页
 exports.new = function(req, res) {
-  res.render('admin', {
-    title: 'movie 后台录入页',
-    movie: {
-      title: '',
-      director: '',
-      country: '',
-      year: '',
-      poster: '',
-      flash: '',
-      summary: '',
-      language: '',
-    },
+  Category.fetch((err, categories) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render('admin', {
+        title: 'movie 后台录入页',
+        movie: {},
+        categories,
+      });
+    }
   });
 }
 
@@ -53,33 +52,49 @@ exports.save = function(req, res) {
       if (err) {
         console.log(err);
       } else {
-        _movie = _.assign(movie, movieObj);
-        _movie.save((err, movie) => {
-          if (err) {
-            console.log(err);
-          } else {
-            res.redirect(`/movie/${movie._id}`);
-          }
-        });
+        Category.update(
+          { '_id': movie.category },
+          { '$pull': { 'movies': id } }, (err, category) => {
+            if (err) {
+              return console.log(err);
+            }
+            _movie = _.assign(movie, movieObj);
+            _movie.save((err, movie) => {
+              if (err) {
+                console.log(err);
+              } else {
+                Category.findById(movie.category, (err, category) => {
+                  category.movies.push(movie._id);
+                  category.save((err, category) => {
+                    if (err) {
+                      return console.log(err);
+                    }
+                    res.redirect(`/movie/${movie._id}`);
+                  });
+                })
+              }
+            });
+          })
       }
     });
   } else {
-    _movie = new Movie({
-      director: movieObj.director,
-      title: movieObj.title,
-      language: movieObj.language,
-      country: movieObj.country,
-      summary: movieObj.summary,
-      flash: movieObj.flash,
-      poster: movieObj.poster,
-      year: movieObj.year,
-    });
+    console.log('new');
+    _movie = new Movie(movieObj);
 
     _movie.save((err, movie) => {
       if (err) {
         console.log(err);
       } else {
-        res.redirect(`/movie/${movie._id}`);
+        Category.findById(movie.category, (err, category) => {
+          category.movies.push(movie._id);
+          category.save((err, category) => {
+            if (err) {
+              console.log(err);
+            } else {
+              res.redirect(`/movie/${movie._id}`);
+            }
+          })
+        })
       }
     });
   }
@@ -91,10 +106,19 @@ exports.update = function(req, res){
 
   if (id) {
     Movie.findById(id, (err, movie) => {
-      res.render('admin', {
-        title: 'movie 后台更新',
-        movie,
-      });
+      if (err) {
+        return console.log(err);
+      }
+      Category.fetch((err, categories) => {
+        if (err) {
+          return console.log(err);
+        }
+        res.render('admin', {
+          title: 'movie 后台更新',
+          movie,
+          categories,
+        });
+      })
     });
   }
 }

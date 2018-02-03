@@ -1,15 +1,19 @@
 const Movie = require('../models/movie');
+const Category = require('../models/category');
 
 // index
 exports.index = function(req, res) {
-  Movie.fetch((err, movies) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.render('index', {
-        title: 'movie 首页',
-        movies,
-      });
-    }
-  });
+  Category
+    .find({})
+    .populate({ path: 'movies', options: { limit: 6 }})
+    .exec((err, categories) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.render('index', {
+          title: 'movie 首页',
+          categories,
+        });
+      }
+    });
 }

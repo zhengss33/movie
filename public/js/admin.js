@@ -13,4 +13,9 @@ $(function() {
       }
     });
   });
+
+  $('.douban').blur(function() {
+    const id = $(this).val();
+    console.log(id);
+  });
 })

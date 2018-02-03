@@ -47,7 +47,7 @@ CommentSchema.statics = {
   fetch(cb) {
     this
       .find({})
-      .sort('meta.update')
+      .sort('meta.updateAt')
       .exec(cb);
   },
   findById(id, cb) {
