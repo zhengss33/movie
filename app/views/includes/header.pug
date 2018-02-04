@@ -1,18 +1,21 @@
-.container
-  .row
-    .page-header.mt-2.mb-2
-      h1= title
-.navbar.navbar-default.navbar-fixed-bottom
+nav.navbar.navbar-dark.bg-primary
   .container
-    .navbar-header
-      a.navbar-brand(href="/") 重度科幻迷
-    if user
-      p.navbar-text.navbar-right
-        span 欢迎您, #{user.name}
-        span &nbsp; | &nbsp;
-        a.navbar-link(href="/logout") 登出
-    else
-      p.navbar-text.navbar-right
-        a.navbar-link(href="/signup") 注册
-        span &nbsp; | &nbsp;
-        a.navbar-link(href="/signin") 登录
+    a.navbar-brand(href="/") Movie
+    .ml-auto
+      form.form-inline.my-2.my-lg-0(action="/result", method="GET")
+        input.form-control.mr-sm-2(type="search", name="name", value="" placeholder="Search", aria-label="Search")
+        button.btn.btn-outline-light.my-2.my-sm-0(type="submit") Search
+
+  .navbar.navbar-light.fixed-bottom(style={"background-color": "#e3f2fd"})
+    .container
+      a.navbar-brand(href="/") 豆瓣电影
+      if user
+        .navbar-text.navbar-right
+          span 欢迎您, #{user.name}
+          span &nbsp; | &nbsp;
+          a.navbar-link(href="/logout") 登出
+      else
+        .navbar-text.navbar-right
+          a.navbar-link(href="/signup") 注册
+          span &nbsp; | &nbsp;
+          a.navbar-link(href="/signin") 登录

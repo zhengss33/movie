@@ -1,0 +1,23 @@
+extends ../layout
+
+block content
+  .container
+    .card.card-primary.mt-5
+      h5.card-header=title
+      .card-body
+        .row
+          if movies && movies.length > 0
+            each movie in movies
+              .col-md-2
+                .card
+                  a(href=`/movie/${movie_id}`)
+                    img.card-img-top(src=movie.poster, alt=movie.title, height="200")
+                  .card-body
+                    h6(style={overflow: 'hidden', 'text-overflow': 'ellipsis', 'white-space': 'nowrap'}) #{movie.title}
+                    a.btn.btn-primary(href=`/movie/${movie_id}` role="button") 观看影片
+    nav(aria-label="Page navigation").mt-4
+      ul.pagination.justify-content-end
+        - for(let i = 1; i < totalPage + 1; i++) {
+            li.page-item(class={'active': i  === curPage})
+              a.page-link(href=`/result?tag=${tag}&p=${i}`) #{i}
+        - }

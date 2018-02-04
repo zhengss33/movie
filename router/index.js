@@ -3,6 +3,7 @@ const Movie = require('../app/routes/movie');
 const User = require('../app/routes/user');
 const Comment = require('../app/routes/comment');
 const Category = require('../app/routes/category');
+const Search = require('../app/routes/search');
 
 module.exports = function(app) {
   // pre handle user session
@@ -13,6 +14,9 @@ module.exports = function(app) {
 
   // index
   app.get('/', Index.index);
+
+  // search-result
+  app.get('/result', Search.result)
 
   // movie
   app.get('/movie/:id', Movie.detail);

@@ -11,7 +11,7 @@ exports.index = function(req, res) {
         console.log(err);
       } else {
         res.render('index', {
-          title: 'movie 首页',
+          title: '电影首页',
           categories,
         });
       }

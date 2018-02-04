@@ -3,8 +3,9 @@ extends ../layout.pug
 block content
   .container
     each category in  categories
-      .card.card-primary
-        h5.card-header=category.name
+      .card.card-primary.mt-5
+        h5.card-header
+          a(href=`/result?tag=${category.name}&p=1`) #{category.name}
         .card-body
           .row
             if category.movies && category.movies.length > 0
@@ -12,7 +13,7 @@ block content
                 .col-md-2
                   .card
                     a(href=`/movie/${item._id}`)
-                      img.card-img-top(src=item.poster, alt=item.title, height="215")
+                      img.card-img-top(src=item.poster, alt=item.title, height="200")
                     .card-body
                       h6(style={overflow: 'hidden', 'text-overflow': 'ellipsis', 'white-space': 'nowrap'}) #{item.title}
                       a.btn.btn-primary(href=`/movie/${item._id}` role="button") 观看影片
