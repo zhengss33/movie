@@ -1,7 +1,7 @@
 const Movie = require('../models/movie');
 const Comment = require('../models/comment');
 const Category = require('../models/category');
-const _ = require('lodash');
+const _ = require('lodash');;
 
 // movie detail
 exports.detail = function(req, res) {
@@ -45,7 +45,12 @@ exports.new = function(req, res) {
 exports.save = function(req, res) {
   const movieObj = req.body.movie;
   const id = movieObj._id;
+  const file = req.file;
   let _movie;
+
+  if (file) {
+    movieObj.poster = file.filename;
+  }
 
   if (id) {
     Movie.findById(id, (err, movie) => {

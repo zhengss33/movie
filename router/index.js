@@ -4,6 +4,21 @@ const User = require('../app/routes/user');
 const Comment = require('../app/routes/comment');
 const Category = require('../app/routes/category');
 const Search = require('../app/routes/search');
+const path = require('path');
+const multer = require('multer');
+const storage = multer.diskStorage({
+  destination(req, file, cb) {
+    const dest = path.join(__dirname, '../public/upload');
+    cb(null, dest);
+  },
+  filename(req, file, cb) {
+    const type = file.mimetype.split('/')[1];
+    cb(null, `${file.fieldname}-${Date.now()}.${type}`);
+  },
+});
+const upload = multer({
+  storage: storage,
+});
 
 module.exports = function(app) {
   // pre handle user session
@@ -24,7 +39,7 @@ module.exports = function(app) {
   // admin
   // movie
   app.get('/admin/movie', User.signinRequire, User.adminRequire, Movie.new);
-  app.post('/admin/movie/new', User.signinRequire, User.adminRequire, Movie.save);
+  app.post('/admin/movie/new', User.signinRequire, User.adminRequire, upload.single('uploadPoster'), Movie.save);
   app.get('/admin/movie/update/:id', User.signinRequire, User.adminRequire, Movie.update);
   app.delete('/admin/movie/list', User.signinRequire, User.adminRequire, Movie.delete);
   app.get('/admin/movie/list', User.signinRequire, User.adminRequire, Movie.list);
@@ -44,5 +59,4 @@ module.exports = function(app) {
 
   // comments
   app.post('/movie/comment', User.signinRequire, Comment.save);
-
 }

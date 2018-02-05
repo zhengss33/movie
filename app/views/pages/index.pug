@@ -13,7 +13,10 @@ block content
                 .col-md-2
                   .card
                     a(href=`/movie/${item._id}`)
-                      img.card-img-top(src=item.poster, alt=item.title, height="200")
+                      if item.poster.indexOf('https:') > -1
+                        img.card-img-top(src=item.poster, alt=item.title, height="200")
+                      else
+                        img.card-img-top(src=`/upload/${item.poster}`, alt=item.title, height="200")
                     .card-body
                       h6(style={overflow: 'hidden', 'text-overflow': 'ellipsis', 'white-space': 'nowrap'}) #{item.title}
                       a.btn.btn-primary(href=`/movie/${item._id}` role="button") 观看影片
