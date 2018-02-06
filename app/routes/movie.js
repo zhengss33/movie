@@ -7,6 +7,12 @@ const _ = require('lodash');;
 exports.detail = function(req, res) {
   const id = req.params.id;
 
+  Movie.update({ '_id': id }, {$inc: { pv: 1 }}, (err) => {
+    if (err) {
+      console.log(err);
+    }
+  });
+
   Movie.findById(id, (err, movie) => {
     if (err) {
       console.log(err);
@@ -152,7 +158,7 @@ exports.list = function(req, res) {
     if (err) {
       console.log(err);
     } else {
-      res.render('list', {
+      res.render('admin-movies', {
         title: 'movie 电影列表',
         movies,
       })

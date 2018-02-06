@@ -1,4 +1,4 @@
-nav.navbar.navbar-dark.bg-primary
+nav.navbar.navbar-dark.bg-info
   .container
     a.navbar-brand(href="/") Movie
     .ml-auto
@@ -6,7 +6,7 @@ nav.navbar.navbar-dark.bg-primary
         input.form-control.mr-sm-2(type="search", name="name", value="" placeholder="Search", aria-label="Search")
         button.btn.btn-outline-light.my-2.my-sm-0(type="submit") Search
 
-  .navbar.navbar-light.fixed-bottom(style={"background-color": "#e3f2fd"})
+  .navbar.bg-info.fixed-bottom(style={'opacity': '0.9'})
     .container
       a.navbar-brand(href="/") 豆瓣电影
       if user
